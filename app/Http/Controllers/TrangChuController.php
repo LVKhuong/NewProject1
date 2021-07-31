@@ -3,49 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redis;
 
 use App\Models\sanpham;
 use App\Models\donhang;
 use App\Models\chitietdonhang;
 use App\Models\thuonghieu;
 use App\Models\chungloai;
-use App\Models\FileImage;
-use App\Models\giamgia;
 
 class TrangChuController extends Controller
 {
     public function index()
     {
         $ThuongHieus = thuonghieu::all();
-
         foreach ($ThuongHieus as $ThuongHieu) {
             $SanPhams[$ThuongHieu->id] = thuonghieu::find($ThuongHieu->id)->sanpham;
         }
 
         $ChungLoais = chungloai::all();
-
         foreach ($ChungLoais as $ChungLoai) {
             $sanphams[$ChungLoai->id] = chungloai::find($ChungLoai->id)->sanpham;
         }
 
         $dataSanPham = sanpham::paginate(6);
-
-        foreach ($dataSanPham as $data) {
-            $FileImages = sanpham::find($data->id)->images;
-        }
-
         $count = session()->get('count');
 
         return view('trangchu.trangchu', [
-            'ThuongHieus' => $ThuongHieus,
-            'SanPhams' => $SanPhams,
-            'ChungLoais' => $ChungLoais,
-            'sanphams' => $sanphams,
-            'dataSanPham' => $dataSanPham,
-            'FileImages' => $FileImages,
-            'count' => $count,
+            'ThuongHieus'   => $ThuongHieus,
+            'SanPhams'      => $SanPhams,
+            'ChungLoais'    => $ChungLoais,
+            'sanphams'      => $sanphams,
+            'dataSanPham'   => $dataSanPham,
+            'count'         => $count,
         ]);
     }
 
@@ -61,11 +49,11 @@ class TrangChuController extends Controller
             session()->put(['cart' => $Cart, 'count' => $count]);
         } else {
             $Cart[$SanPham->id] = [
-                'ten' => $SanPham->ten,
-                'gia' => $SanPham->gia,
-                'soluong' => 1,
-                'sale' => $SanPham->sale,
-                'id_sanpham' => $SanPham->id,
+                'ten'           => $SanPham->ten,
+                'gia'           => $SanPham->gia,
+                'soluong'       => 1,
+                'sale'          => $SanPham->sale,
+                'id_sanpham'    => $SanPham->id,
             ];
             $count = count($Cart);
             session()->put([
@@ -114,15 +102,15 @@ class TrangChuController extends Controller
 
 
             return view('trangchu.shoppingcart', [
-                'count' => $count,
-                'ThuongHieus' => $ThuongHieus,
-                'SanPhams' => $SanPhams,
-                'ChungLoais' => $ChungLoais,
-                'sanphams' => $sanphams,
-                'carts' => $carts,
-                'images' => $images,
-                'tongTien' => $tongTien,
-                'dataSanPham' => $dataSanPham,
+                'count'         => $count,
+                'ThuongHieus'   => $ThuongHieus,
+                'SanPhams'      => $SanPhams,
+                'ChungLoais'    => $ChungLoais,
+                'sanphams'      => $sanphams,
+                'carts'         => $carts,
+                'images'        => $images,
+                'tongTien'      => $tongTien,
+                'dataSanPham'   => $dataSanPham,
             ]);
         } else {
             return redirect()->route('trangchu');

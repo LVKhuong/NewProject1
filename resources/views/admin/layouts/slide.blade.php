@@ -3,7 +3,13 @@
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
         </div>
-        <div class="sidebar-brand-text mx-0">Admin <sup>{{ Auth::check() ? Auth::user()->name : '' }}</sup></div>
+        <div class="sidebar-brand-text mx-0">Admin
+            <sup>
+                @auth
+                    {{ Auth::user()->name }}
+                @endauth
+            </sup>
+        </div>
     </a>
 
     <!-- Divider -->
@@ -108,7 +114,7 @@
                 <a class="collapse-item" href="{{ route('nguoidung.index') }}">Danh sách</a>
 
                 <hr class="sidebar-divide">
-                
+
                 @if (Auth::check() && Auth::user()->email == 'admin@gmail.com')
                     <a class="collapse-item" href="{{ route('chucnang.index') }}">Danh sách chức năng</a>
                     <a class="collapse-item" href="{{ route('chucnang.create') }}">Thêm chức năng</a>

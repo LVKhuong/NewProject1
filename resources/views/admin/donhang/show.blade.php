@@ -27,6 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <?php $stt = 0; ?>
                         @foreach ($data as $value)
                             <tr>
@@ -38,7 +39,7 @@
                                 <td>{{ number_format($value->thanhtien) }}</td>
                                 <td>
                                     <div>
-                                        <form action="{{ route('chitietdonhang.destroy', $value->id) }}" method="POST">
+                                        <form action="{{ route('chitietdonhang.destroy', $value->id) }}">
                                             @csrf @method('DELETE')
                                             <input type="submit" value="Xóa" class="btn btn-sm btn-danger">
                                         </form>

@@ -8,7 +8,8 @@ use App\Models\User;
 use App\Http\Requests\CreateChucNangRequest;
 use Illuminate\Http\Request;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class ChucNangUserController extends Controller
 {

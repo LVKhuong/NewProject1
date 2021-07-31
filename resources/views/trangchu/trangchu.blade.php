@@ -40,10 +40,10 @@
                 </div>
             @endforeach
         </div>
-        <div>
+        {{-- <div>
             {{ $dataSanPham->links() }}
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 
