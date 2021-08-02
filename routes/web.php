@@ -222,8 +222,6 @@ Route::group([
         'prefix' => 'import',
         'as' => 'import.',
     ], function () {
-        Route::get('/sanpham', [ImportExcelController::class, 'show'])->name('sanpham.show');
-
         Route::post('/sanpham', [ImportExcelController::class, 'store'])->name('sanpham.store');
         
     });

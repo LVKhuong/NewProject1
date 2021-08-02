@@ -12,7 +12,7 @@ use App\Models\chungloai;
 
 class TrangChuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $ThuongHieus = thuonghieu::all();
         foreach ($ThuongHieus as $ThuongHieu) {
@@ -24,7 +24,14 @@ class TrangChuController extends Controller
             $sanphams[$ChungLoai->id] = chungloai::find($ChungLoai->id)->sanpham;
         }
 
-        $dataSanPham = sanpham::paginate(6);
+        if ($request->has('thuonghieu')) {
+            $dataSanPham = sanpham::where('id_thuonghieu', $request->input('thuonghieu'))->paginate(6);
+        } else if ($request->has('chungloai')) {
+            $dataSanPham = sanpham::where('id_chungloai', $request->input('chungloai'))->paginate(6);
+        } else {
+            $dataSanPham = sanpham::paginate(6);
+        }
+
         $count = session()->get('count');
 
         return view('trangchu.trangchu', [
@@ -34,6 +41,28 @@ class TrangChuController extends Controller
             'sanphams'      => $sanphams,
             'dataSanPham'   => $dataSanPham,
             'count'         => $count,
+        ]);
+    }
+
+    public function locthuonghieu()
+    {
+        $ThuongHieus = thuonghieu::all();
+        foreach ($ThuongHieus as $ThuongHieu) {
+            $SanPhams[$ThuongHieu->id] = thuonghieu::find($ThuongHieu->id)->sanpham;
+        }
+
+        $ChungLoais = chungloai::all();
+        foreach ($ChungLoais as $ChungLoai) {
+            $sanphams[$ChungLoai->id] = chungloai::find($ChungLoai->id)->sanpham;
+        }
+
+
+
+        return view('trangchu.trangchu', [
+            'ThuongHieus'   => $ThuongHieus,
+            'SanPhams'      => $SanPhams,
+            'ChungLoais'    => $ChungLoais,
+            'sanphams'      => $sanphams,
         ]);
     }
 

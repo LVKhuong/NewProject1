@@ -186,7 +186,7 @@
                             @foreach ($ChungLoais as $ChungLoai)
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title"><a href="#">{{ $ChungLoai->ten }}</a></h4>
+                                        <h4 class="panel-title"><a href="{{route('trangchu',['chungloai'=>$ChungLoai->id])}}">{{ $ChungLoai->ten }}</a></h4>
                                     </div>
                                 </div>
                             @endforeach
@@ -199,7 +199,7 @@
                             <div class="brands-name">
                                 <ul class="nav nav-pills nav-stacked">
                                     @foreach ($ThuongHieus as $ThuongHieu)
-                                        <li><a href="#"> <span
+                                        <li><a href="{{route('trangchu',['thuonghieu'=>$ThuongHieu->id])}}"> <span
                                                     class="pull-right">({{ count($SanPhams[$ThuongHieu->id]) }})</span>{{ $ThuongHieu->ten }}</a>
                                         </li>
                                     @endforeach

@@ -81,10 +81,6 @@
                 <a class="collapse-item" href="quanli/sanpham/giamgia/create">Thêm giảm giá</a>
 
                 <hr class="sidebar-divide">
-
-                <a class="collapse-item" href="quanli/import/sanpham">Import Excel</a>
-                <a class="collapse-item" href="quanli/export/sanpham">Export Excel</a>
-
             </div>
         </div>
     </li>

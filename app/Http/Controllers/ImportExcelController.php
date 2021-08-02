@@ -10,15 +10,6 @@ use App\Imports\sanphamImportExcel;
 
 class ImportExcelController extends Controller
 {
-    public function show()
-    {
-        $data = sanpham::orderBy('created_at', 'desc')->paginate(5);
-
-        return view('admin.import_excel.show', [
-            'data' => $data,
-        ]);
-    }
-
     public function store(Request $request)
     {
         $file = $request->file('excel')->store('import_excel');

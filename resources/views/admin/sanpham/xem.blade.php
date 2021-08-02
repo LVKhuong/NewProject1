@@ -58,8 +58,15 @@
                             {{ session('thongbao') }}
                         </div>
                     @endif
+                    
+                    <form action="{{route('import.sanpham.store')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input class="btn btn-primary" type="file" name="excel">
+                        <input class="btn btn-primary" type="submit" value="Tải file Excel">
+                        <a class="btn btn-success" href="quanli/export/sanpham">Export Excel</a>
+                    </form>
 
-                    <table class="table table-bordered text-center m-0" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered text-center m-0 mt-3" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>STT</th>
