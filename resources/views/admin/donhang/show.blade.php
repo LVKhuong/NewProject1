@@ -32,7 +32,7 @@
                         @foreach ($data as $value)
                             <tr>
                                 <td>{{ ++$stt }}</td>
-                                <td>{{ $value->sanpham->ten }}</td>
+                                <td>{{ $value->sanpham->ten ?? "" }}</td>
                                 <td>{{ $value->created_at}}</td>
                                 <td>{{ number_format($value->gia) }}</td>
                                 <td>{{ $value->soluong }}</td>

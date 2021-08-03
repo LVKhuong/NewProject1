@@ -65,6 +65,8 @@
         </div>
         <div class="tab-content">
             <div class="tab-pane fade active in" id="reviews">
+
+                {{-- form binh luan --}}
                 <div class="col-sm-12">
                     <ul>
                         @auth
@@ -76,23 +78,24 @@
                         <li><i class="fa fa-clock-o"></i> {{ date('d-m-yy') }} </li>
                     </ul>
 
-                    <form action="{{ route('binhluan.store', $sanpham->id) }}" method="POST">
-                        @csrf
-                        @if (!Auth::check())
-                            <span>
-                                <input type="text" name="name" placeholder="Your Name" />
-                                <input type="email" name="email" placeholder="Email Address" />
-                            </span>
-                        @endif
 
-                        <textarea name="noidung"></textarea>
-                        <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
-                        <input type="submit" class="btn btn-default pull-right" value="Bình luận">
-                    </form>
+                    @if (!Auth::check())
+                        <span>
+                            <input type="text" name="name" id="name" placeholder="Your Name" />
+                            <input type="email" name="email" id="email" placeholder="Email Address" />
+                        </span>
+                    @endif
+
+                    <textarea name="noidung" id="noidung"></textarea>
+                    <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
+
+                    <input type="button" id="btn-binhluan" class="btn btn-default pull-right" value="Bình luận">
+
                 </div>
             </div>
-            <hr class="sidebar-divider my-0">
-            <div class="tab-pane fade active in" id="reviews">
+
+            {{-- hien thi binh luan --}}
+            <div class="tab-pane fade active in m-0" id="reviews">
                 @foreach ($sanpham->binhluans as $binhluan)
                     <div class="col-sm-12">
                         <div id="binhluan">
@@ -100,48 +103,57 @@
                                 <li> <img style="width: 50px; height: 50px;"
                                         src="{{ isset($binhluan->user->image->duongdan) ? $binhluan->user->image->duongdan : '/images/user/download (3).jpg' }}"
                                         alt="">
-                                    {{ $binhluan->name }} </li>
+                                    <b>{{ $binhluan->name }}</b> </li>
+                            </ul>
+                            <ul>
                                 <li><i class="fa fa-clock-o"></i> {{ $binhluan->created_at }} </li>
                             </ul>
                             <ul>
                                 <li>{{ $binhluan->noidung }}</li>
                             </ul>
                         </div>
-                        @if (isset($binhluan->tralois))
-                        <div class="pull-right">
-                            @foreach ($binhluan->tralois as $traloi)
-                            
-                                <ul>
-                                    <li> <img style="width: 50px; height: 50px;"
-                                            src="{{ isset($traloi->user->image->duongdan) ? $traloi->user->image->duongdan : '/images/user/download (3).jpg' }}"
-                                            alt="">
-                                        {{ $traloi->name }} </li>
-                                    <li><i class="fa fa-clock-o"></i> {{ $traloi->created_at }} </li>
-                                </ul>
-                                <ul>
-                                    <li>{{ $traloi->noidung }}</li>
-                                </ul>
-                            
-                            @endforeach
-                        </div>
-                        @endif
                         
+                        @if (isset($binhluan->tralois))
+
+                            {{-- hien thi tra loi binh luan --}}
+                            <div class="pull-right">
+                                @foreach ($binhluan->tralois as $traloi)
+
+                                    <ul>
+                                        <li> <img style="width: 50px; height: 50px;"
+                                                src="{{ isset($traloi->user->image->duongdan) ? $traloi->user->image->duongdan : '/images/user/download (3).jpg' }}"
+                                                alt="">
+                                            <b>{{ $traloi->name }}</b> </li>
+                                    </ul>
+                                    <ul>
+                                        <li><i class="fa fa-clock-o"></i> {{ $traloi->created_at }} </li>
+                                    </ul>
+                                    <ul>
+                                        <li>{{ $traloi->noidung }}</li>
+                                    </ul>
+
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
+
                     <hr class="sidebar-divider my-0">
                     <div class="col-sm-12">
                         <ul>
-                            <li><a class="collapse" data-toggle="collapse"
+                            <li><a class="collapse btn btn-success" data-toggle="collapse"
                                     data-target="#collapse{{ $binhluan->id }}">Trả
                                     lời</a></li>
                         </ul>
 
                         <div id="collapse{{ $binhluan->id }}" class="collapse">
+
+                            {{-- form tra loi binh luan --}}
                             <div class="pull-right">
                                 <ul>
                                     @auth
                                         <li> <img style="width: 50px; height: 50px;"
                                                 src="{{ Auth::user()->image->duongdan ?? '' }}" alt="">
-                                            {{ Auth::user()->name }} </li>
+                                            <b>{{ Auth::user()->name }}</b> </li>
                                     @endauth
 
                                     <li><i class="fa fa-clock-o"></i> {{ date('d-m-yy') }} </li>
@@ -151,19 +163,25 @@
                                     @csrf
                                     @if (!Auth::check())
                                         <span>
-                                            <input type="text" name="nameTraloi" placeholder="Tên cún cơm" />
-                                            <input type="email" name="emailTraloi" placeholder="Địa chỉ email" />
+                                            <input type="text" id="nameTraloi" name="nameTraloi" placeholder="Tên cún cơm" />
+                                            <input type="email" id="emailTraloi" name="emailTraloi" placeholder="Địa chỉ email" />
                                         </span>
                                     @endif
-                            </div>
-                            <textarea name="noidungTraloi"></textarea>
-                            <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
-
-                            <input type="submit" class="btn btn-success pull-right" value="Trả lời">
-                            </form>
                         </div>
+                                    <textarea name="noidungTraloi"></textarea>
+                                    <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
+
+                                    <input type="submit" class="btn btn-success pull-right" value="Trả lời">
+
+                                </form>
+                        </div>
+                        <hr width="100%" color="#171717">
                     </div>
+                    
                 @endforeach
+            </div>
+            <div id="binhluan_ajax">
+
             </div>
         </div>
     </div>
@@ -274,6 +292,7 @@
 @section('script')
     <script>
         $(function() {
+            //them vao gio hang 
             $('#addCart').on('click', function() {
                 $.ajax({
                     url: '{{ route('addToCart') }}',
@@ -288,8 +307,31 @@
                 });
             });
 
+            // ajax binh luan
+            $('#btn-binhluan').on('click', function() {
+                var name = $('#name').val();
+                var email = $('#email').val();
+                var noidung = $('#noidung').val();
 
+                $.ajax({
+                    url: '{{ route('binhluan.store', $sanpham->id) }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        name: name,
+                        email: email,
+                        noidung: noidung,
+                        idsanpham: '{{ $sanpham->id }}',
+                    }
+                }).done(function(data){
+                    $('#binhluan_ajax').html(data.binhluan);
+                });
+            });
 
+            //  ajax tra loi binh luan
+            $('#traloi')
+            
         });
     </script>
 
