@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BinhluanController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TrangChuController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ImportExcelController;
 use App\Http\Controllers\ExportExcelController;
 use App\Http\Controllers\GiamgiaController;
+use App\Http\Controllers\TraloiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,13 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/sanpham/{sanpham}', [TrangChuController::class, 'show'])->name('sanphamshow');
+
+// Route bình luận
+Route::post('/binhluan/{sanpham}', [BinhluanController::class, 'store'])->name('binhluan.store');
+
+// Route trả lời bình luận
+Route::post('/traloi/{binhluan}', [TraloiController::class, 'store'])->name('traloi.store');
 
 //Route thanh toán giỏ hàng
 

@@ -13,8 +13,8 @@
                     <div class="single-products">
                         <div class="productinfo text-center">
 
-                            <img src="{{ $data->images->first()->duongdan ?? "" }}" alt="Chưa có ảnh"
-                                style="width: 100%; height:300px; position: relative" />
+                            <a href="{{route('sanphamshow', $data->id)}}"><img src="{{ $data->images->first()->duongdan ?? "" }}" alt="Chưa có ảnh"
+                                style="width: 100%; height:300px; position: relative" /></a>
                             @if (isset($data->giamgia))
                                 <span style="position: absolute; right:0; background: black" class="badge badge-warning">Mua
                                     {{ $data->giamgia->tong_soluong }} Giảm

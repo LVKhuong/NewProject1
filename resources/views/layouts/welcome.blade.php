@@ -8,6 +8,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Shop ABCD</title>
+    <base href="{{asset('')}}">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -17,6 +18,7 @@
     <link href="css/responsive.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        
 
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -51,8 +53,8 @@
                                 @if (Route::has('login'))
                                     @auth
                                         @if (isset(Auth::user()->image->duongdan))
-                                            <img src="{{ Auth::user()->image->duongdan }}"
-                                                style="width: 30px; height:30px;" alt="">
+                                            <img src="{{ Auth::user()->image->duongdan ?? '' }}"
+                                                style="width: 30px; height:30px;" alt="Chưa có ảnh">
                                         @endif
 
                                         <li><a href="{{ url('/home') }}"><b>{{ Auth::user()->name }}</b></a></li>
@@ -160,10 +162,11 @@
                         </div>
 
                     </div>
-                    <div class="col-sm-3">
-                        <div class="search_box pull-right">
-                            <input type="text" placeholder="Search" />
-                        </div>
+                    <div class="col-sm-3 ">
+                        <form action="{{ route('trangchu') }}" method="get">
+                            <input type="text" placeholder="Tìm kiếm sản phẩm, thương hiệu" name="TimKiem"/>
+                            <input type="submit" class="btn" value="Tìm kiếm" style="background: #FE980F;">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -186,7 +189,10 @@
                             @foreach ($ChungLoais as $ChungLoai)
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title"><a href="{{route('trangchu',['chungloai'=>$ChungLoai->id])}}">{{ $ChungLoai->ten }}</a></h4>
+                                        <h4 class="panel-title"><a
+                                                href="{{ route('trangchu', ['chungloai' => $ChungLoai->id]) }}"><span
+                                                    class="pull-right">({{ count($sanphams[$ChungLoai->id]) }})</span>{{ $ChungLoai->ten }}</a>
+                                        </h4>
                                     </div>
                                 </div>
                             @endforeach
@@ -199,8 +205,11 @@
                             <div class="brands-name">
                                 <ul class="nav nav-pills nav-stacked">
                                     @foreach ($ThuongHieus as $ThuongHieu)
-                                        <li><a href="{{route('trangchu',['thuonghieu'=>$ThuongHieu->id])}}"> <span
-                                                    class="pull-right">({{ count($SanPhams[$ThuongHieu->id]) }})</span>{{ $ThuongHieu->ten }}</a>
+                                        <li><a href="{{ route('trangchu', ['thuonghieu' => $ThuongHieu->id]) }}">
+                                                <span class="pull-right">
+                                                    ({{ count($SanPhams[$ThuongHieu->id]) }})
+                                                </span>{{ $ThuongHieu->ten }}
+                                            </a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -208,7 +217,7 @@
                         </div>
                         <!--/brands_products-->
 
-                        <div class="price-range">
+                        {{-- <div class="price-range">
                             <!--price-range-->
                             <h2>Price Range</h2>
                             <div class="well text-center">
@@ -216,7 +225,27 @@
                                     data-slider-step="5" data-slider-value="[250,450]" id="sl2"><br />
                                 <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
                             </div>
+                        </div> --}}
+                        <div class="prive-range">
+                            <h2>Sắp xếp theo</h2>
+                            <form action="{{ route('trangchu') }}" method="get">
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="SapXep">
+                                        <option>Mời bạn chọn</option>
+                                        <option value="desc" {{(old('SapXep') == 'desc')?"checked":""}}>Giá giảm dần</option>
+                                        <option value="asc" {{(old('SapXep') == 'asc')?"checked":""}}>Giá tăng dần</option>
+                                        <option value="new" {{(old('SapXep') == 'new')?"checked":""}}>Sản phẩm New</option>
+                                        <option value="hot" {{(old('SapXep') == 'hot')?"checked":""}}>Sản phẩm Hot</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="submit" value="Sắp xếp" style="background: #FE980F;"
+                                        class="btn btn-default">
+                                </div>
+                            </form>
+
                         </div>
+
                         <!--/price-range-->
 
                         <div class="shipping text-center">

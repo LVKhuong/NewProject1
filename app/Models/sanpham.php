@@ -45,4 +45,9 @@ class sanpham extends Model
     {
         return $this->morphMany(FileImage::class, 'imageable', 'imageable_type', 'imageable_id');
     }
+
+    public function binhluans(){
+        return $this->hasMany(binhluan::class, 'id_sanpham', 'id');
+    }
+
 }

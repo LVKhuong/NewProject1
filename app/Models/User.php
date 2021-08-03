@@ -55,4 +55,12 @@ class User extends Authenticatable
         return $this->morphOne(FileImage::class, 'imageable', 'imageable_type', 'imageable_id');
     }
 
+    public function binhluans(){
+        return $this->hasMany(binhluan::class, 'id_user', 'id');
+    }
+
+    public function tralois(){
+        return $this->hasMany(traloi::class, 'id_user', 'id');
+    }
+
 }
