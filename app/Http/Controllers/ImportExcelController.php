@@ -10,12 +10,12 @@ use App\Imports\sanphamImportExcel;
 
 class ImportExcelController extends Controller
 {
-    public function store(Request $request)
-    {
-        $file = $request->file('excel')->store('import_excel');
+   public function store(Request $request)
+   {
+      $file = $request->file('excel')->store('import_excel');
 
-        Excel::import(new sanphamImportExcel, $file);
+      Excel::import(new sanphamImportExcel, $file);
 
-        return redirect()->back()->with('thongbao', 'Bạn đã import thành công ');
-    }
+      return redirect()->back()->with('thongbao', 'Bạn đã import thành công ');
+   }
 }
