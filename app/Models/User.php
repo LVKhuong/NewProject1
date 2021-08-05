@@ -43,12 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role_user(){
-        return $this->belongsTo(role_user::class, 'role', 'id');
-    }
-
     public function chucnang(){
         return $this->hasMany(ChucNangUser::class, 'tenemail', 'email');
+    }
+    
+    public function checkauth($tenRoute){
+        $chucnang = ChucNangUser::where('tenemail',$this->email)->where('tenroute',$tenRoute)->get();
+        
+        if(count($chucnang) > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function image(){
@@ -61,6 +67,10 @@ class User extends Authenticatable
 
     public function tralois(){
         return $this->hasMany(traloi::class, 'id_user', 'id');
+    }
+
+    public function role(){
+        return $this->hasOne(role::class, 'id_user', 'id');
     }
 
 }

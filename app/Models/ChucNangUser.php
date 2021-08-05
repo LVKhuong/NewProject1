@@ -19,4 +19,5 @@ class ChucNangUser extends Model
     public function emailuser(){
         return $this->belongsTo(User::class, 'tenemail', 'email');
     }
+
 }

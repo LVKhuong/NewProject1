@@ -17,6 +17,8 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ImportExcelController;
 use App\Http\Controllers\ExportExcelController;
 use App\Http\Controllers\GiamgiaController;
+use App\Http\Controllers\QuanlimenuController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TraloiController;
 
 /*
@@ -34,6 +36,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Chi tiet san pham
 Route::get('/sanpham/{sanpham}', [TrangChuController::class, 'show'])->name('sanphamshow');
 
 // Route bình luận
@@ -43,7 +46,6 @@ Route::post('/binhluan/{sanpham}', [BinhluanController::class, 'store'])->name('
 Route::post('/traloi/{binhluan}', [TraloiController::class, 'store'])->name('traloi.store');
 
 //Route thanh toán giỏ hàng
-
 Route::get('/', [TrangChuController::class, 'index'])->name('trangchu');
 Route::post('/addcart', [TrangChuController::class, 'addToCart'])->name('addToCart');
 Route::post('/congcart', [TrangChuController::class, 'CongCart'])->name('CongCart');
@@ -52,194 +54,194 @@ Route::get('/xoacart/{id}', [TrangChuController::class, 'xoaCart'])->name('xoaCa
 Route::get('/shopping', [TrangChuController::class, 'shoppingCart'])->name('shoppingCart');
 
 // thêm đơn hàng + chi tiết đơn hàng bằng giỏ hàng
-
 Route::post('/thanhtoan', [TrangChuController::class, 'ThanhToan'])->name('ThanhToan');
 
+// chức năng từng người dùng
 Route::group([
-   'prefix' => 'quanli',
-   'middleware' => 'auth',
+    'prefix' => 'chucnang',
+    'as' => 'chucnang.',
+    'middleware' => ['AdminLogin', 'auth'],
 ], function () {
+    Route::get('/', [ChucNangUserController::class, 'index'])->name('index');
 
-   Route::get('/', [SanphamController::class, 'index'])->name('dashboard')->middleware('check.user:dashboard');
+    Route::get('/create', [ChucNangUserController::class, 'create'])->name('create');
 
-   Route::get('/sendcart/{iddonhang}', [MailController::class, 'sendMail'])->name('send.Mail')->middleware('check.user:send.Mail');
+    Route::get('/{idnguoidung}', [ChucNangUserController::class, 'show'])->name('show');
 
-   // thương hiệu
+    Route::post('/', [ChucNangUserController::class, 'store'])->name('store');
 
-   Route::group([
-      'prefix' => 'thuonghieu',
-      'as' => 'thuonghieu.',
-   ], function () {
-      Route::get('/', [ThuonghieuController::class, 'index'])->name('index')->middleware('check.user:thuonghieu.index');
+    Route::get('/{idnguoidung}/edit', [ChucNangUserController::class, 'edit'])->name('edit');
 
-      Route::get('/create', [ThuonghieuController::class, 'create'])->name('create')->middleware('check.user:thuonghieu.create');
+    Route::put('/{idnguoidung}', [ChucNangUserController::class, 'update'])->name('update');
 
-      Route::post('/', [ThuonghieuController::class, 'store'])->name('store')->middleware('check.user:thuonghieu.store');
+    Route::delete('/{idnguoidung}', [ChucNangUserController::class, 'destroy'])->name('destroy');
 
-      Route::get('/{thuonghieu}/edit', [ThuonghieuController::class, 'edit'])->name('edit')->middleware('check.user:thuonghieu.edit');
+    //route them menu quyen
+    Route::get('/menu', [RoleController::class, 'index'])->name('menu_index');
 
-      Route::put('/{thuonghieu}', [ThuonghieuController::class, 'update'])->name('update')->middleware('check.user:thuonghieu.update');
+    Route::get('/menu/create', [RoleController::class, 'create'])->name('menu_create');
 
-      Route::delete('/{thuonghieu}', [ThuonghieuController::class, 'destroy'])->name('destroy')->middleware('check.user:thuonghieu.destroy');
-   });
+    Route::post('/menu', [RoleController::class, 'store'])->name('menu_store');
 
+});
 
-   // chủng loại
 
-   Route::group([
-      'prefix' => 'chungloai',
-      'as' => 'chungloai.',
-   ], function () {
-      Route::get('/', [ChungloaiController::class, 'index'])->name('index')->middleware('check.user:chungloai.index');
 
-      Route::get('/create', [ChungloaiController::class, 'create'])->name('create')->middleware('check.user:chungloai.create');
 
-      Route::post('/', [ChungloaiController::class, 'store'])->name('store')->middleware('check.user:chungloai.store');
+// Route USER
+Route::group([
+    'prefix' => 'quanli',
+    'middleware' => ['auth', 'check.user'],
+], function () {
+    Route::get('/', [SanphamController::class, 'index'])->name('dashboard');
 
-      Route::get('/{chungloai}/edit', [ChungloaiController::class, 'edit'])->name('edit')->middleware('check.user:chungloai.edit');
+    Route::get('/sendcart/{iddonhang}', [MailController::class, 'sendMail'])->name('send.Mail');
 
-      Route::put('/{chungloai}', [ChungloaiController::class, 'update'])->name('update')->middleware('check.user:chungloai.update');
+    // thương hiệu
+    Route::group([
+        'prefix' => 'thuonghieu',
+        'as' => 'thuonghieu.',
+    ], function () {
+        Route::get('/', [ThuonghieuController::class, 'index'])->name('index');
 
-      Route::delete('/{chungloai}', [ChungloaiController::class, 'destroy'])->name('destroy')->middleware('check.user:chungloai.destroy');
-   });
+        Route::get('/create', [ThuonghieuController::class, 'create'])->name('create');
 
-   // sản phẩm
+        Route::post('/', [ThuonghieuController::class, 'store'])->name('store');
 
-   Route::group([
-      'prefix' => 'sanpham',
-      'as' => 'sanpham.'
-   ], function () {
-      Route::get('/', [SanphamController::class, 'index'])->name('index')->middleware('check.user:sanpham.index');
+        Route::get('/{thuonghieu}/edit', [ThuonghieuController::class, 'edit'])->name('edit');
 
-      Route::get('/create', [SanphamController::class, 'create'])->name('create')->middleware('check.user:sanpham.create');
+        Route::put('/{thuonghieu}', [ThuonghieuController::class, 'update'])->name('update');
 
-      Route::post('/', [SanphamController::class, 'store'])->name('store')->middleware('check.user:sanpham.store');
+        Route::delete('/{thuonghieu}', [ThuonghieuController::class, 'destroy'])->name('destroy');
+    });
 
-      Route::get('/{sanpham}/edit', [SanphamController::class, 'edit'])->name('edit')->middleware('check.user:sanpham.edit');
 
-      Route::put('/{sanpham}', [SanphamController::class, 'update'])->name('update')->middleware('check.user:sanpham.update');
+    // chủng loại
+    Route::group([
+        'prefix' => 'chungloai',
+        'as' => 'chungloai.',
+    ], function () {
+        Route::get('/', [ChungloaiController::class, 'index'])->name('index');
 
-      Route::delete('/{sanpham}', [SanphamController::class, 'destroy'])->name('destroy')->middleware('check.user:sanpham.destroy');
+        Route::get('/create', [ChungloaiController::class, 'create'])->name('create');
 
-      // thêm sale hàng loạt
+        Route::post('/', [ChungloaiController::class, 'store'])->name('store');
 
-      Route::get('/sale', [SaleController::class, 'index'])->name('sale')->middleware('check.user:sanpham.sale');
-      Route::post('/sale', [SaleController::class, 'sell'])->name('sell')->middleware('check.user:sanpham.sell');
+        Route::get('/{chungloai}/edit', [ChungloaiController::class, 'edit'])->name('edit');
 
-      // tùy chọn giảm giá sản phẩm
+        Route::put('/{chungloai}', [ChungloaiController::class, 'update'])->name('update');
 
-      Route::get('/giamgia', [GiamgiaController::class, 'index'])->name('giamgia.index')->middleware('check.user:sanpham.giamgia.index');
+        Route::delete('/{chungloai}', [ChungloaiController::class, 'destroy'])->name('destroy');
+    });
 
-      Route::get('/giamgia/create', [GiamgiaController::class, 'create'])->name('giamgia.create')->middleware('check.user:sanpham.giamgia.create');
+    // sản phẩm
+    Route::group([
+        'prefix' => 'sanpham',
+        'as' => 'sanpham.'
+    ], function () {
+        Route::get('/', [SanphamController::class, 'index'])->name('index');
 
-      Route::post('/giamgia', [GiamgiaController::class, 'store'])->name('giamgia.store')->middleware('check.user:sanpham.giamgia.store');
+        Route::get('/create', [SanphamController::class, 'create'])->name('create');
 
-      Route::get('/giamgia/{idgiamgia}/edit', [GiamgiaController::class, 'edit'])->name('giamgia.edit')->middleware('check.user:sanpham.giamgia.edit');
+        Route::post('/', [SanphamController::class, 'store'])->name('store');
 
-      Route::put('/giamgia/{idgiamgia}', [GiamgiaController::class, 'update'])->name('giamgia.update')->middleware('check.user:sanpham.giamgia.update');
+        Route::get('/{sanpham}/edit', [SanphamController::class, 'edit'])->name('edit');
 
-      Route::delete('/giamgia/{idgiamgia}', [GiamgiaController::class, 'destroy'])->name('giamgia.destroy')->middleware('check.user:sanpham.giamgia.destroy');
-   });
+        Route::put('/{sanpham}', [SanphamController::class, 'update'])->name('update');
 
-   // đơn hàng
+        Route::delete('/{sanpham}', [SanphamController::class, 'destroy'])->name('destroy');
 
-   Route::group([
-      'prefix' => 'donhang',
-      'as' => 'donhang.',
-   ], function () {
-      Route::get('/', [DonhangController::class, 'index'])->name('index')->middleware('check.user:donhang.index');
+        // thêm sale hàng loạt
+        Route::get('/sale', [SaleController::class, 'index'])->name('sale');
 
-      Route::get('/{donhang}', [DonhangController::class, 'show'])->name('show')->middleware('check.user:donhang.show');
+        Route::post('/sale', [SaleController::class, 'sell'])->name('sell');
 
-      Route::get('/create', [DonhangController::class, 'create'])->name('create')->middleware('check.user:donhang.create');
+        // tùy chọn giảm giá sản phẩm
+        Route::get('/giamgia', [GiamgiaController::class, 'index'])->name('giamgia.index');
 
-      Route::post('', [DonhangController::class, 'store'])->name('store')->middleware('check.user:donhang.store');
+        Route::get('/giamgia/create', [GiamgiaController::class, 'create'])->name('giamgia.create');
 
-      Route::get('/{donhang}/edit', [DonhangController::class, 'edit'])->name('edit')->middleware('check.user:donhang.edit');
+        Route::post('/giamgia', [GiamgiaController::class, 'store'])->name('giamgia.store');
 
-      Route::put('/{donhang}', [DonhangController::class, 'update'])->name('update')->middleware('check.user:donhang.update');
+        Route::get('/giamgia/{idgiamgia}/edit', [GiamgiaController::class, 'edit'])->name('giamgia.edit');
 
-      Route::delete('/{donhang}', [DonhangController::class, 'destroy'])->name('destroy')->middleware('check.user:donhang.destroy');
-   });
+        Route::put('/giamgia/{idgiamgia}', [GiamgiaController::class, 'update'])->name('giamgia.update');
 
+        Route::delete('/giamgia/{idgiamgia}', [GiamgiaController::class, 'destroy'])->name('giamgia.destroy');
+    });
 
-   // chi tiết đơn hàng
+    // đơn hàng
+    Route::group([
+        'prefix' => 'donhang',
+        'as' => 'donhang.',
+    ], function () {
+        Route::get('/', [DonhangController::class, 'index'])->name('index');
 
-   Route::group([
-      'prefix' => 'chitietdonhang',
-      'as' => 'chitietdonhang.',
-   ], function () {
-      Route::get('', [ChitietdonhangController::class, 'index'])->name('index')->middleware('check.user:chitietdonhang.index');
+        Route::get('/{donhang}', [DonhangController::class, 'show'])->name('show');
 
-      Route::get('/create', [ChitietdonhangController::class, 'create'])->name('create')->middleware('check.user:chitietdonhang.create');
+        Route::get('/create', [DonhangController::class, 'create'])->name('create');
 
-      Route::post('', [ChitietdonhangController::class, 'store'])->name('store')->middleware('check.user:.store');
+        Route::post('', [DonhangController::class, 'store'])->name('store');
 
-      Route::get('/{chitietdonhang}/edit', [ChitietdonhangController::class, 'edit'])->name('edit')->middleware('check.user:chitietdonhang.edit');
+        Route::get('/{donhang}/edit', [DonhangController::class, 'edit'])->name('edit');
 
-      Route::put('/{chitietdonhang}', [ChitietdonhangController::class, 'update'])->name('update')->middleware('check.user:chitietdonhang.update');
+        Route::put('/{donhang}', [DonhangController::class, 'update'])->name('update');
 
-      Route::delete('/{chitietdonhang}', [ChitietdonhangController::class, 'destroy'])->name('destroy')->middleware('check.user:chitietdonhang.destroy');
-   });
+        Route::delete('/{donhang}', [DonhangController::class, 'destroy'])->name('destroy');
+    });
 
 
-   // người dùng
+    // chi tiết đơn hàng
+    Route::group([
+        'prefix' => 'chitietdonhang',
+        'as' => 'chitietdonhang.',
+    ], function () {
+        Route::get('', [ChitietdonhangController::class, 'index'])->name('index');
 
-   Route::group([
-      'prefix' => 'nguoidung',
-      'as' => 'nguoidung.',
+        Route::get('/create', [ChitietdonhangController::class, 'create'])->name('create');
 
-   ], function () {
-      Route::get('/', [NguoidungController::class, 'index'])->name('index')->middleware('check.user:nguoidung.index');
+        Route::post('', [ChitietdonhangController::class, 'store'])->name('store');
 
-      Route::get('/create', [NguoidungController::class, 'create'])->name('create')->middleware('check.user:nguoidung.create');
+        Route::get('/{chitietdonhang}/edit', [ChitietdonhangController::class, 'edit'])->name('edit');
 
-      Route::post('/', [NguoidungController::class, 'store'])->name('store')->middleware('check.user:nguoidung.store');
+        Route::put('/{chitietdonhang}', [ChitietdonhangController::class, 'update'])->name('update');
 
-      Route::get('/{nguoidung}/edit', [NguoidungController::class, 'edit'])->name('edit')->middleware('check.user:nguoidung.edit');
+        Route::delete('/{chitietdonhang}', [ChitietdonhangController::class, 'destroy'])->name('destroy');
+    });
 
-      Route::put('/{nguoidung}', [NguoidungController::class, 'update'])->name('update')->middleware('check.user:nguoidung.update');
 
-      Route::delete('/{nguoidung}', [NguoidungController::class, 'destroy'])->name('destroy')->middleware('check.user:nguoidung.destroy');
-   });
+    // người dùng
+    Route::group([
+        'prefix' => 'nguoidung',
+        'as' => 'nguoidung.',
 
-   // chức năng từng người dùng
+    ], function () {
+        Route::get('/', [NguoidungController::class, 'index'])->name('index');
 
-   Route::group([
-      'prefix' => 'chucnang',
-      'as' => 'chucnang.',
-      'middleware' => ['AdminLogin:admin@gmail.com'],
-   ], function () {
-      Route::get('/', [ChucNangUserController::class, 'index'])->name('index');
+        Route::get('/create', [NguoidungController::class, 'create'])->name('create');
 
-      Route::get('/create', [ChucNangUserController::class, 'create'])->name('create');
+        Route::post('/', [NguoidungController::class, 'store'])->name('store');
 
-      Route::get('/{idnguoidung}', [ChucNangUserController::class, 'show'])->name('show');
+        Route::get('/{nguoidung}/edit', [NguoidungController::class, 'edit']);
 
-      Route::post('/', [ChucNangUserController::class, 'store'])->name('store');
+        Route::put('/{nguoidung}', [NguoidungController::class, 'update'])->name('update');
 
-      Route::get('/{idnguoidung}/edit', [ChucNangUserController::class, 'edit'])->name('edit');
+        Route::delete('/{nguoidung}', [NguoidungController::class, 'destroy'])->name('destroy');
+    });
 
-      Route::put('/{idnguoidung}', [ChucNangUserController::class, 'update'])->name('update');
+    // import excel 
+    Route::group([
+        'prefix' => 'import',
+        'as' => 'import.',
+    ], function () {
+        Route::post('/sanpham', [ImportExcelController::class, 'store'])->name('sanpham.store');
+    });
 
-      Route::delete('/{idnguoidung}', [ChucNangUserController::class, 'destroy'])->name('destroy');
-   });
-
-   // import excel 
-
-   Route::group([
-      'prefix' => 'import',
-      'as' => 'import.',
-   ], function () {
-      Route::post('/sanpham', [ImportExcelController::class, 'store'])->name('sanpham.store');
-   });
-
-   //export excel
-
-   Route::group([
-      'prefix' => 'export',
-      'as' => 'export.',
-   ], function () {
-      Route::get('/sanpham', [ExportExcelController::class, 'xuatsanpham'])->name('sanpham.xuat');
-   });
+    //export excel
+    Route::group([
+        'prefix' => 'export',
+        'as' => 'export.',
+    ], function () {
+        Route::get('/sanpham', [ExportExcelController::class, 'xuatsanpham'])->name('sanpham.xuat');
+    });
 });

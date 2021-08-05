@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\donhang;
+use App\Http\Requests\CreateRoleRequest;
+use App\Models\role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-
-class DonhangController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +16,7 @@ class DonhangController extends Controller
      */
     public function index()
     {
-        $data = donhang::orderBy('created_at', 'desc')->paginate(3);
-
-        return view('admin.donhang.xem', [
-            'data' => $data,
-        ]);
+        return view('admin.menu.xem');
     }
 
     /**
@@ -29,7 +26,11 @@ class DonhangController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::paginate(1);
+
+        return view('admin.menu.nhap', [
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -38,32 +39,37 @@ class DonhangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateRoleRequest $request)
     {
+        $data = $request->role;
+        $role = explode(',', $data);
+        role::create([
+            'role' => $role[0],
+            'ten_role' => $role[1],
+            'id_user' => $request->user,
+        ]);
+
+        return redirect()->back()->with('thongbao', 'Bạn đã thêm quyền menu thành công');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\donhang  $donhang
+     * @param  \App\Models\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(donhang $donhang)
+    public function show(role $role)
     {
-        $data = $donhang->chitietdonhang;
-
-        return view('admin.donhang.show', [
-            'data' => $data,
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\donhang  $donhang
+     * @param  \App\Models\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(donhang $donhang)
+    public function edit(role $role)
     {
         //
     }
@@ -72,10 +78,10 @@ class DonhangController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\donhang  $donhang
+     * @param  \App\Models\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, donhang $donhang)
+    public function update(Request $request, role $role)
     {
         //
     }
@@ -83,13 +89,11 @@ class DonhangController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\donhang  $donhang
+     * @param  \App\Models\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(donhang $donhang)
+    public function destroy(role $role)
     {
-        $donhang->delete();
-
-        return redirect()->back();
+        //
     }
 }

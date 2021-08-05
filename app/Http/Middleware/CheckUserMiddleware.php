@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ChucNangUser;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class CheckUserMiddleware
 {
@@ -18,14 +19,12 @@ class CheckUserMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $tenRoute)
+    public function handle(Request $request, Closure $next)
     {
-        foreach(Auth::user()->chucnang as $chucnang){
-            if($tenRoute == $chucnang->tenroute){
-                return $next($request);
-            }
+        if (Auth::user()->checkauth($request->route()->getName())) {
+            return $next($request);
         }
+
         return redirect()->back();
-   
     }
 }

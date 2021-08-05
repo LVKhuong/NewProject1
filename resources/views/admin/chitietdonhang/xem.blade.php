@@ -1,19 +1,19 @@
 @extends('admin.layouts.index')
 
 @section('noidung')
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Chi tiết đơn hàng</h6>
-  </div>
-
-  <div class="card-body">
-    <div class="table-responsive">
-
-      @if (session('thongbao'))
-        <div class="alert alert-success">
-          {{ session('thongbao') }}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Chi tiết đơn hàng</h6>
         </div>
-      @endif
+
+        <div class="card-body">
+            <div class="table-responsive">
+
+                @if (session('thongbao'))
+                    <div class="alert alert-success">
+                        {{ session('thongbao') }}
+                    </div>
+                @endif
 
                 <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -22,7 +22,7 @@
                             <th>Tên sản phẩm</th>
                             <th>ID đơn hàng</th>
                             <th>Gía</th>
-                            <th>Số lượng</th> 
+                            <th>Số lượng</th>
                             <th>Thành tiền</th>
                             <th>Chức năng</th>
                         </tr>
@@ -32,9 +32,9 @@
                         @foreach ($data as $value)
                             <tr>
                                 <td>{{ ++$stt }}</td>
-                                <td>{{ $value->sanpham->ten }}</td>
-                                <td>{{ $value->id_donhang}}</td>
-                                <td>{{ number_format($value->gia)}}</td>
+                                <td>{{ $value->sanpham->ten ?? '' }}</td>
+                                <td>{{ $value->id_donhang }}</td>
+                                <td>{{ number_format($value->gia) }}</td>
                                 <td>{{ $value->soluong }}</td>
                                 <td>{{ number_format($value->thanhtien) }}</td>
                                 <td>

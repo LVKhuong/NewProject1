@@ -104,7 +104,8 @@
 
                                         <input type="hidden" id="payGia{{ $cart['id_sanpham'] }}"
                                             name="gia{{ $cart['id_sanpham'] }}" value="
-                                                                @if ($cart['sale']> 0) {{ $cart['gia'] - ($cart['gia'] * $cart['sale']) / 100 }}
+                                                                                @if ($cart['sale']>
+                                        0) {{ $cart['gia'] - ($cart['gia'] * $cart['sale']) / 100 }}
                                     @else
                                         {{ $cart['gia'] }} @endif
                                         ">
@@ -146,6 +147,12 @@
     @foreach ($carts as $cart)
         <script>
             $(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
                 $('#CongCart{{ $cart['id_sanpham'] }}').click(function() {
                     $.ajax({
                         url: '{{ route('CongCart') }}',
@@ -153,7 +160,6 @@
                         type: 'post',
                         data: {
                             id_sanpham: '{{ $cart['id_sanpham'] }}',
-                            _token: '{{ csrf_token() }}'
                         }
                     }).done(function(data) {
                         $('#soLuong{{ $cart['id_sanpham'] }}').html(data.soLuong);
@@ -173,7 +179,6 @@
                         type: 'post',
                         data: {
                             id_sanpham: '{{ $cart['id_sanpham'] }}',
-                            _token: '{{ csrf_token() }}'
                         }
                     }).done(function(data) {
                         $('#soLuong{{ $cart['id_sanpham'] }}').html(data.soLuong);

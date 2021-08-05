@@ -10,9 +10,9 @@ use Excel;
 
 class ExportExcelController extends Controller
 {
-   public function xuatsanpham()
-   {
+    public function xuatsanpham()
+    {
 
-      return Excel::download(new sanphamExport, 'allsanpham.xlsx');
-   }
+        return Excel::download(new sanphamExport, 'allsanpham.xlsx');
+    }
 }

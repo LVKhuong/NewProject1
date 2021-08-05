@@ -2,6 +2,21 @@
 
 @section('noidung')
     <div class="product-details">
+
+        {{-- // breadcrumb --}}
+        <div class="col-sm-12" style="font-size: 18px;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="{{ route('trangchu') }}">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ route('trangchu', ['thuonghieu' => $sanpham->thuonghieu->id]) }}">{{ $sanpham->thuonghieu->ten }}</a>
+                    </li>
+                    <li class="breadcrumb-item "><a
+                            href="{{ route('trangchu', ['chungloai' => $sanpham->chungloai->id]) }}">{{ $sanpham->chungloai->ten }}</a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
         <!--product-details-->
         <div class="col-sm-5">
             <div class="view-product">
@@ -50,6 +65,14 @@
                     {{ $sanpham->isNew == 1 ? 'NEW' : '_' }}</p>
                 <p><b>Thương hiệu:</b> {{ $sanpham->thuonghieu->ten }}</p>
                 <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
+                <br>
+                <p>Tag :
+                    @if (isset($tags))
+                        @foreach ($tags as $tag)
+                            <a href="{{ route('trangchu', ['TimKiem' => $tag]) }}">{{ $tag }}</a>,
+                        @endforeach
+                    @endif
+                </p>
             </div>
             <!--/product-information-->
         </div>
@@ -75,7 +98,7 @@
                                 {{ Auth::user()->name }} </li>
                         @endauth
 
-                        <li><i class="fa fa-clock-o"></i> {{ date('d-m-yy') }} </li>
+                        <li><i class="fa fa-clock-o"></i> <b>{{ date('d-m-yy') }}</b> </li>
                     </ul>
 
 
@@ -103,16 +126,17 @@
                                 <li> <img style="width: 50px; height: 50px;"
                                         src="{{ isset($binhluan->user->image->duongdan) ? $binhluan->user->image->duongdan : '/images/user/download (3).jpg' }}"
                                         alt="">
-                                    <b>{{ $binhluan->name }}</b> </li>
+                                    <b>{{ $binhluan->name }}</b>
+                                </li>
                             </ul>
                             <ul>
-                                <li><i class="fa fa-clock-o"></i> {{ $binhluan->created_at }} </li>
+                                <li><i class="fa fa-clock-o"></i> <b>{{ $binhluan->created_at }}</b> </li>
                             </ul>
                             <ul>
                                 <li>{{ $binhluan->noidung }}</li>
                             </ul>
                         </div>
-                        
+
                         @if (isset($binhluan->tralois))
 
                             {{-- hien thi tra loi binh luan --}}
@@ -123,10 +147,11 @@
                                         <li> <img style="width: 50px; height: 50px;"
                                                 src="{{ isset($traloi->user->image->duongdan) ? $traloi->user->image->duongdan : '/images/user/download (3).jpg' }}"
                                                 alt="">
-                                            <b>{{ $traloi->name }}</b> </li>
+                                            <b>{{ $traloi->name }}</b>
+                                        </li>
                                     </ul>
                                     <ul>
-                                        <li><i class="fa fa-clock-o"></i> {{ $traloi->created_at }} </li>
+                                        <li><i class="fa fa-clock-o"></i> <b>{{ $traloi->created_at }}</b> </li>
                                     </ul>
                                     <ul>
                                         <li>{{ $traloi->noidung }}</li>
@@ -153,127 +178,86 @@
                                     @auth
                                         <li> <img style="width: 50px; height: 50px;"
                                                 src="{{ Auth::user()->image->duongdan ?? '' }}" alt="">
-                                            <b>{{ Auth::user()->name }}</b> </li>
+                                            <b>{{ Auth::user()->name }}</b>
+                                        </li>
                                     @endauth
 
-                                    <li><i class="fa fa-clock-o"></i> {{ date('d-m-yy') }} </li>
+                                    <li><i class="fa fa-clock-o"></i> <b>{{ date('d-m-yy') }}</b> </li>
                                 </ul>
 
                                 <form action="{{ route('traloi.store', $binhluan->id) }}" method="POST">
                                     @csrf
                                     @if (!Auth::check())
                                         <span>
-                                            <input type="text" id="nameTraloi" name="nameTraloi" placeholder="Tên cún cơm" />
-                                            <input type="email" id="emailTraloi" name="emailTraloi" placeholder="Địa chỉ email" />
+                                            <input type="text" id="nameTraloi" name="nameTraloi"
+                                                placeholder="Tên cún cơm" />
+                                            <input type="email" id="emailTraloi" name="emailTraloi"
+                                                placeholder="Địa chỉ email" />
                                         </span>
                                     @endif
-                        </div>
-                                    <textarea name="noidungTraloi"></textarea>
-                                    <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
+                            </div>
+                            <textarea name="noidungTraloi"></textarea>
+                            <b>Đánh giá: </b> <img src="images/product-details/rating.png" alt="" />
 
-                                    <input type="submit" class="btn btn-success pull-right" value="Trả lời">
+                            <input type="submit" class="btn btn-success pull-right" value="Trả lời">
 
-                                </form>
+                            </form>
                         </div>
                         <hr width="100%" color="#171717">
                     </div>
-                    
+
                 @endforeach
             </div>
-            <div id="binhluan_ajax">
 
-            </div>
+        </div>
+        <div id="binhluan_ajax">
+
         </div>
     </div>
     <!--/category-tab-->
 
     <div class="recommended_items">
         <!--recommended_items-->
-        <h2 class="title text-center">recommended items</h2>
+        <h2 class="title text-center">Sản phẩm liên quan</h2>
 
         <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="item active">
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend1.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
+                    <h2 class="title text-center">{{ $sanpham->thuonghieu->ten }}</h2>
+                    @foreach ($sanpham->thuonghieu->sanpham->take(4) as $sp)
+                        <div class="col-sm-3">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        <img src="{{ $sp->images->first()->duongdan }}" alt="" />
+                                        <h2>{{ number_format($sp->gia) }}</h2>
+                                        <p>{{ $sp->ten }}</p>
+                                        <button type="button" class="btn btn-default add-to-cart"><i
+                                                class="fa fa-shopping-cart"></i>Add to cart</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend2.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend3.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+
                 </div>
                 <div class="item">
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend1.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
+                    <h2 class="title text-center">{{ $sanpham->chungloai->ten }}</h2>
+                    @foreach ($sanpham->chungloai->sanpham->take(4) as $sp1)
+                        <div class="col-sm-3">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        <img src="{{ $sp1->images->first()->duongdan }}" alt="" />
+                                        <h2>{{ number_format($sp1->gia) }}</h2>
+                                        <p>{{ $sp1->ten }}</p>
+                                        <button type="button" class="btn btn-default add-to-cart"><i
+                                                class="fa fa-shopping-cart"></i>Add to cart</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend2.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/recommend3.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i
-                                            class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
@@ -292,6 +276,11 @@
 @section('script')
     <script>
         $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             //them vao gio hang 
             $('#addCart').on('click', function() {
                 $.ajax({
@@ -300,7 +289,6 @@
                     dataType: 'json',
                     data: {
                         idsanpham: '{{ $sanpham->id }}',
-                        _token: '{{ csrf_token() }}'
                     }
                 }).done(function(data) {
                     $('#CountCart').html(data.count);
@@ -318,20 +306,19 @@
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        _token: '{{ csrf_token() }}',
                         name: name,
                         email: email,
                         noidung: noidung,
                         idsanpham: '{{ $sanpham->id }}',
                     }
-                }).done(function(data){
+                }).done(function(data) {
                     $('#binhluan_ajax').html(data.binhluan);
                 });
             });
 
             //  ajax tra loi binh luan
             $('#traloi')
-            
+
         });
     </script>
 

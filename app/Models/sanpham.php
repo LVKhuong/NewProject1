@@ -22,8 +22,9 @@ class sanpham extends Model
         'id_thuonghieu',
         'isHot',
         'isNew',
-        'sale',
-        'gioithieu'
+        'sale', 
+        'tag',
+        'gioithieu',
     ];
 
     public function chungloai()

@@ -7,15 +7,19 @@ use Illuminate\Http\Request;
 use App\Models\sanpham;
 use Excel;
 use App\Imports\sanphamImportExcel;
+use Illuminate\Support\Facades\Storage;
 
 class ImportExcelController extends Controller
 {
-   public function store(Request $request)
-   {
-      $file = $request->file('excel')->store('import_excel');
+    public function store(Request $request)
+    {
+        $file = $request->file('excel');
+        $tenFile = $file->getClientOriginalName();
 
-      Excel::import(new sanphamImportExcel, $file);
+        Storage::putFileAs('/public/admin/excel', $file, date('d-m-y') .'_'. $tenFile);
 
-      return redirect()->back()->with('thongbao', 'Bạn đã import thành công ');
-   }
+        Excel::import(new sanphamImportExcel, $file);
+
+        return redirect()->back()->with('thongbao', 'Bạn đã import thành công ');
+    }
 }

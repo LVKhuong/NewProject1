@@ -3,15 +3,16 @@
 @section('noidung')
 
     <div class="row">
+
         <div class="features_items">
             <!--features_items-->
             <h2 class="title text-center">Tất cả sản phẩm</h2>
 
             @foreach ($dataSanPham as $data)
-                <div class="product-image-wrapper col-sm-4">
+                <div class="product-image-wrapper col-sm-4" style="height: 100%">
 
                     <div class="single-products">
-                        <div class="productinfo text-center">
+                        <div class="productinfo text-left">
 
                             <a href="{{ route('sanphamshow', $data->id) }}"><img
                                     src="{{ $data->images->first()->duongdan ?? '' }}" alt="Chưa có ảnh"
@@ -21,17 +22,21 @@
                                     {{ $data->giamgia->tong_soluong }} Giảm
                                     {{ number_format($data->giamgia->giagiam) }} đ</span>
                             @endif
-                            <div class="row">
+
+                            <p style="font-size: 20px;"><b>{{ $data->ten }}</b></p>
+
+                            <div>
                                 @if ($data->sale > 0)
-                                    <h2 class="col-sm-6">
-                                        {{ number_format($data->gia - ($data->gia * $data->sale) / 100) }}<span>đ</span>
-                                    </h2>
-                                    <h3 class="col-sm-6"><del>{{ number_format($data->gia) }}<span>đ</span></del></h3>
+                                    <h6 class="col-sm-6">
+                                        Giá:{{ number_format($data->gia - ($data->gia * $data->sale) / 100) }}<span>đ</span>
+                                    </h6>
+                                    <h6 class="col-sm-6"><del>Giá:{{ number_format($data->gia) }}<span>đ</span></del>
+                                    </h6>
                                 @else
-                                    <h2 class="col-sm-12 text-center">{{ number_format($data->gia) }}<span>đ</span></h2>
+                                    <h6 class="col-sm-12">Giá:{{ number_format($data->gia) }}<span>đ</span></h6>
                                 @endif
                             </div>
-                            <p><b>{{ $data->ten }}</b></p>
+
                             <input type="button" id="addCart{{ $data->id }}" class="btn btn-default add-to-cart"
                                 value="Thêm giỏ hàng">
                             <a href="{{ route('shoppingCart') }}" class="btn btn-default add-to-cart"><i
@@ -52,6 +57,12 @@
     @foreach ($dataSanPham as $data)
         <script>
             $(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
                 $('#addCart{{ $data->id }}').on('click', function() {
                     $.ajax({
                         url: '{{ route('addToCart') }}',
@@ -59,7 +70,6 @@
                         dataType: 'json',
                         data: {
                             idsanpham: '{{ $data->id }}',
-                            _token: '{{ csrf_token() }}'
                         }
                     }).done(function(data) {
                         $('#CountCart').html(data.count);

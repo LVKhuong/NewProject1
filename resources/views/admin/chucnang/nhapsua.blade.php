@@ -17,7 +17,7 @@
                     @endif
 
 
-                    <form action="{{ route('chucnang.update', $user->id) }}" method="POST">
+                    <form action="{{ route('chucnang.update', $users->id) }}" method="POST">
                         @csrf @method('put')
 
                         <div class="input-group mt-3 mb-3 ml-3 col-sm-6">
@@ -25,7 +25,7 @@
                                 <span class="input-group-text" id="basic-addon3">Chọn EMAIL</span>
                             </div>
                             <select class="form-control form-control-lg" name="email">
-                                <option>{{ $user->email }}</option>
+                                <option>{{ $users->email }}</option>
 
                             </select>
                         </div>
@@ -82,11 +82,11 @@
 
                         {{-- CHUNG LOAI --}}
                         <div class="input-group mt-3 mb-3 ml-3">
-                          <div class="input-group-prepend">
-                              <span class="input-group-text" id="basic-addon4">Chủng loại</span>
-                          </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon4">Chủng loại</span>
+                            </div>
 
-                          <div class="form-check form-check-inline ml-3">
+                            <div class="form-check form-check-inline ml-3">
                                 <input @foreach ($chucNang as $cn) {{ $cn->tenroute == 'chungloai.index' ? 'checked' : '' }} @endforeach class="form-check-input" type="checkbox" name="role[]" id="inlineCheckbox1"
                                     value="chungloai.index">
                                 <label class="form-check-label" for="inlineCheckbox1">Xem</label>

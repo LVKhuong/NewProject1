@@ -997,10 +997,10 @@ h2.title {
 }
 
 .category-tab ul {
-  background: #40403E;
-  border-bottom: 1px solid #FE980F;
+  /* background: #40403E;
+  border-bottom: 1px solid #FE980F; */
   list-style: none outside none;
-  margin: 0 0 30px;
+  margin: 0 15px 30px;
   padding: 0;
   width: 100%;
 }

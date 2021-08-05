@@ -106,6 +106,13 @@
                             </div>
                         </div>
 
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Nhập tags </span>
+                            </div>
+                            <input type="text" class="form-control" data-role="tagsinput" name="tag">
+                        </div>
+
                 </div>
                 <div class="input-group mb-3 col-sm-6">
                     <div class="form-group">

@@ -62,11 +62,12 @@
                         </div>
                         <div class="input-group mb-3">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" {{($data->isHot == 1) ? "checked" : ""}} name="isHot" type="checkbox" id="inlineCheckbox1" value="1">
+                                <input class="form-check-input" {{ $data->isHot == 1 ? 'checked' : '' }} name="isHot"
+                                    type="checkbox" id="inlineCheckbox1" value="1">
                                 <label class="form-check-label" for="inlineCheckbox1"> HOT</label>
 
-                                <input class="form-check-input ml-3" {{($data->isNew == 1) ? "checked" : ""}} name="isNew" type="checkbox" id="inlineCheckbox2"
-                                    value="1">
+                                <input class="form-check-input ml-3" {{ $data->isNew == 1 ? 'checked' : '' }} name="isNew"
+                                    type="checkbox" id="inlineCheckbox2" value="1">
                                 <label class="form-check-label" for="inlineCheckbox2"> NEW</label>
                             </div>
 
@@ -113,8 +114,27 @@
                             </div>
                         </div>
 
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Nhập tags </span>
+                            </div>
+                            <input type="text" class="form-control" data-role="tagsinput" name="tag"
+                                value="{{ $data->tag }}">
+                        </div>
+
                 </div>
                 <div class="input-group mb-3 col-sm-6">
+
+                    @if ($data->images->first())
+                        @foreach ($data->images as $image)
+
+                            <div class="col-sm-3">
+                                <img src="{{ $image->duongdan }}" alt="" style="width: 100%; height:150px">
+                            </div>
+
+                        @endforeach
+                    @endif
+
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Giới thiệu sản phẩm</label>
                         <textarea class="form-control rounded-0" name="gioithieu" id="gioithieu" cols="100"

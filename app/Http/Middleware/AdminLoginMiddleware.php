@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminLoginMiddleware
 {
@@ -15,9 +16,9 @@ class AdminLoginMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $email)
+    public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->email == $email){
+        if(Auth::user()->email == 'admin@gmail.com'){
             return $next($request);
         }
         return redirect()->back();

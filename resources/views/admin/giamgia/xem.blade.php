@@ -49,8 +49,8 @@
                                 <td>{{ ++$stt }}</td>
                                 <td>{{ $giamGia->id }}</td>
                                 <td>{{ $giamGia->id_sanpham }}</td>
-                                <td>{{ $giamGia->sanpham->ten }}</td>
-                                <td>{{ number_format($giamGia->sanpham->gia) }}</td>
+                                <td>{{ $giamGia->sanpham->ten ?? '' }}</td>
+                                <td>{{ $giamGia->sanpham->gia ?? 0 }}</td>
                                 <td>{{ $giamGia->tong_soluong }}</td>
                                 <td>{{ number_format($giamGia->giagiam) }}</td>
                                 <td>
