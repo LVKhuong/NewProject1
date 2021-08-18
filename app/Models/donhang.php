@@ -14,10 +14,13 @@ class donhang extends Model
         'ngaymua',
         'tongtien',
         'trangthai',
+        'diachi',
+        'sodienthoai',
     ];
 
     public function chitietdonhang(){
         return $this->hasMany(chitietdonhang::class, 'id_donhang', 'id');
     }
+
     
 }

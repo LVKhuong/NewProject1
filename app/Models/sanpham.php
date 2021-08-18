@@ -16,6 +16,7 @@ class sanpham extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'ten',
         'gia',
         'id_chungloai',
@@ -37,6 +38,10 @@ class sanpham extends Model
         return $this->belongsTo(thuonghieu::class, 'id_thuonghieu', 'id');
     }
 
+    public function thuoctinh(){
+        return $this->hasMany(thuoctinh::class, 'id_sanpham', 'id');
+    }
+
     public function giamgia()
     {
         return $this->hasOne(giamgia::class, 'id_sanpham', 'id');
@@ -47,8 +52,19 @@ class sanpham extends Model
         return $this->morphMany(FileImage::class, 'imageable', 'imageable_type', 'imageable_id');
     }
 
-    public function binhluans(){
-        return $this->hasMany(binhluan::class, 'id_sanpham', 'id');
+    public function danhgias(){
+        return $this->hasMany(danhgia::class, 'id_sanpham', 'id');
     }
 
+    public function mausacs(){
+        return $this->hasMany(mausac::class, 'id_sanpham', 'id');
+    }
+
+    public function size_tongsoluongs(){
+        return $this->hasManyThrough(size_tongsoluong::class, mausac::class, 'id_sanpham', 'id_mausac', 'id');
+    }
+
+    public function chitietdonhang(){
+        return $this->hasOne(chitietdonhang::class, 'id_sanpham', 'id');
+    }
 }

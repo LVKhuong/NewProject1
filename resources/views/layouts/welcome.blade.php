@@ -33,6 +33,7 @@
 <!--/head-->
 
 <body>
+    <!--/header-->
     @include('layouts.header')
 
     <!--slider-->
@@ -43,11 +44,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-3">
+                    <!--slider-left-->
                     @include('layouts.leftbar')
                 </div>
 
 
                 <div class="col-sm-9">
+                    <!--slider-right-->
                     @yield('noidung')
                 </div>
 
@@ -65,6 +68,46 @@
     <script src="js/jquery.prettyPhoto.js"></script>
     <script src="js/main.js"></script>
 
+
+
+    {{-- autocomplete tim kiem --}}
+    <script>
+        $(function() {
+
+            //set token ajax
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            // autocomplete tim kiem
+            $('#key').keyup(function() {
+                var key = $('#key').val();
+                if (key != '') {
+                    $.ajax({
+                        url: '{{ route('autocomplete') }}',
+                        method: 'POST',
+                        data: {
+                            key: key,
+                        }
+                    }).done(function(data) {
+                        $('#search_ajax').fadeIn();
+                        $('#search_ajax').html(data);
+                    });
+                } else {
+                    $('#search_ajax').fadeOut();
+                }
+            });
+
+            // $(document).on('click', '.show_sanpham', function() {
+            //     $('#key').val($(this).text());
+            //     $('#search_ajax').fadeOut();
+            // });
+        });
+    </script>
+
+    
     @yield('script')
 
 </body>

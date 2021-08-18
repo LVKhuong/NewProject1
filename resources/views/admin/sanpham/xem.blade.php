@@ -58,8 +58,8 @@
                             {{ session('thongbao') }}
                         </div>
                     @endif
-                    
-                    <form action="{{route('import.sanpham.store')}}" method="POST" enctype="multipart/form-data">
+
+                    <form action="{{ route('import.sanpham.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input class="btn btn-primary" type="file" name="excel">
                         <input class="btn btn-primary" type="submit" value="Tải file Excel">
@@ -92,14 +92,12 @@
                                     <td>{{ $value->ten }}</td>
                                     <td>
                                         @foreach ($value->images as $image)
-                                            <img src="{{ $image->duongdan }}"
-                                                style="width: 50px; height:50px;" 
-                                                alt="">
+                                            <img src="{{ $image->duongdan }}" style="width: 50px; height:50px;" alt="">
                                         @endforeach
                                     </td>
                                     <td>{{ number_format($value->gia) }}</td>
-                                    <td>{{ $value->chungloai->ten }}</td>
-                                    <td>{{ $value->thuonghieu->ten }}</td>
+                                    <td>{{ $value->chungloai->ten ?? '' }}</td>
+                                    <td>{{ $value->thuonghieu->ten ?? '' }}</td>
                                     <td>{{ $value->isHot == 1 ? 'Có' : 'Không' }}</td>
                                     <td>{{ $value->isNew == 1 ? 'Có' : 'Không' }}</td>
                                     <td>{{ $value->sale }}</td>
@@ -112,6 +110,15 @@
                                                 class="btn btn-sm btn-success">Sửa</a>
 
                                             <input type="submit" value="Xóa" class="btn btn-sm btn-danger">
+
+                                            <a href="{{ route('sanpham.giamgia.create', ['idsanpham' => $value->id]) }}"
+                                                class="btn btn-sm btn-success">Thêm giảm
+                                                giá
+                                            </a>
+
+                                            <a href="{{ route('mausac.create', $value->id) }}" class="btn btn-sm btn-primary mt-3">Thêm
+                                                màu sắc
+                                            </a>
 
                                         </form>
                                     </td>

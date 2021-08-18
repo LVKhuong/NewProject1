@@ -12,12 +12,12 @@ class ChucNangUser extends Model
     protected $table = 'chuc_nang_users';
 
     protected $fillable = [
-        'tenemail',
+        'id_user',
         'tenroute',
     ];
 
-    public function emailuser(){
-        return $this->belongsTo(User::class, 'tenemail', 'email');
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
 }

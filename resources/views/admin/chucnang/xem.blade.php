@@ -35,6 +35,7 @@
                             <th>ID </th>
                             <th>Tên người dùng</th>
                             <th>Email login</th>
+                            <th>Quyền</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -43,12 +44,13 @@
                             <tr>
                                 <td>{{ $value->id }}</td>
                                 <td>{{ $value->name }}</td>
+                                <td>{{ $value->role->ten_role ?? 'Chưa cấp quyền' }}</td>
                                 <td>{{ $value->email }}</td>
                                 <td>
                                     <a href="{{ route('chucnang.edit', $value->id) }}"
                                         class="btn btn-sm btn-success">Sửa</a>
-                                        <a href="{{ route('chucnang.show', $value->id) }}"
-                                            class="btn btn-sm btn-primary">Xem chức năng</a>
+                                    <a href="{{ route('chucnang.show', $value->id) }}" class="btn btn-sm btn-primary">Xem
+                                        chức năng</a>
                                 </td>
                             </tr>
                         @endforeach

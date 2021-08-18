@@ -1,25 +1,26 @@
 <?php
 
-use App\Http\Controllers\BinhluanController;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\TrangChuController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SanphamController;
-use App\Http\Controllers\ThuonghieuController;
-use App\Http\Controllers\ChungloaiController;
-use App\Http\Controllers\DonhangController;
-use App\Http\Controllers\ChitietdonhangController;
-use App\Http\Controllers\NguoidungController;
-use App\Http\Controllers\MailController;
-use App\Http\Controllers\ChucNangUserController;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\ImportExcelController;
-use App\Http\Controllers\ExportExcelController;
-use App\Http\Controllers\GiamgiaController;
-use App\Http\Controllers\QuanlimenuController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TraloiController;
+use App\Http\Controllers\User\TrangChuController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\Admin\SanphamController;
+use App\Http\Controllers\Admin\ThuonghieuController;
+use App\Http\Controllers\Admin\ChungloaiController;
+use App\Http\Controllers\Admin\DonhangController;
+use App\Http\Controllers\Admin\ChitietdonhangController;
+use App\Http\Controllers\Admin\NguoidungController;
+use App\Http\Controllers\Admin\MailController;
+use App\Http\Controllers\Admin\ChucNangUserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\ImportExcelController;
+use App\Http\Controllers\Admin\ExportExcelController;
+use App\Http\Controllers\Admin\GiamgiaController;
+use App\Http\Controllers\Admin\MausacController;
+use App\Http\Controllers\Admin\SizeTongsoluongController;
+use App\Http\Controllers\Social\SocialController;
+use App\Http\Controllers\User\TraloiDanhgiaController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,31 +33,9 @@ use App\Http\Controllers\TraloiController;
 |
 */
 
-Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Chi tiet san pham
-Route::get('/sanpham/{sanpham}', [TrangChuController::class, 'show'])->name('sanphamshow');
-
-// Route bình luận
-Route::post('/binhluan/{sanpham}', [BinhluanController::class, 'store'])->name('binhluan.store');
-
-// Route trả lời bình luận
-Route::post('/traloi/{binhluan}', [TraloiController::class, 'store'])->name('traloi.store');
-
-//Route thanh toán giỏ hàng
-Route::get('/', [TrangChuController::class, 'index'])->name('trangchu');
-Route::post('/addcart', [TrangChuController::class, 'addToCart'])->name('addToCart');
-Route::post('/congcart', [TrangChuController::class, 'CongCart'])->name('CongCart');
-Route::post('/trucart', [TrangChuController::class, 'TruCart'])->name('TruCart');
-Route::get('/xoacart/{id}', [TrangChuController::class, 'xoaCart'])->name('xoaCart');
-Route::get('/shopping', [TrangChuController::class, 'shoppingCart'])->name('shoppingCart');
-
-// thêm đơn hàng + chi tiết đơn hàng bằng giỏ hàng
-Route::post('/thanhtoan', [TrangChuController::class, 'ThanhToan'])->name('ThanhToan');
-
-// chức năng từng người dùng
+// chức năng từng người dùng admin
 Route::group([
     'prefix' => 'chucnang',
     'as' => 'chucnang.',
@@ -75,16 +54,57 @@ Route::group([
     Route::put('/{idnguoidung}', [ChucNangUserController::class, 'update'])->name('update');
 
     Route::delete('/{idnguoidung}', [ChucNangUserController::class, 'destroy'])->name('destroy');
-
-    //route them menu quyen
-    Route::get('/menu', [RoleController::class, 'index'])->name('menu_index');
-
-    Route::get('/menu/create', [RoleController::class, 'create'])->name('menu_create');
-
-    Route::post('/menu', [RoleController::class, 'store'])->name('menu_store');
-
 });
 
+Auth::routes();
+
+// profile người dùng
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Chi tiet san pham
+Route::get('/sanpham/{sanpham}', [TrangChuController::class, 'show'])->name('sanphamshow');
+
+//Route danh gia
+Route::post('/danhgia', [TrangChuController::class, 'danhgia'])->name('danhgia');
+
+//Route thanh toán giỏ hàng
+Route::get('/', [TrangChuController::class, 'index'])->name('trangchu');
+
+Route::post('/addcart', [TrangChuController::class, 'addToCart'])->name('addToCart');
+Route::post('/congcart', [TrangChuController::class, 'CongCart'])->name('CongCart');
+Route::post('/trucart', [TrangChuController::class, 'TruCart'])->name('TruCart');
+Route::get('/xoacart/{id}', [TrangChuController::class, 'xoaCart'])->name('xoaCart');
+Route::get('/shopping', [TrangChuController::class, 'shoppingCart'])->name('shoppingCart');
+
+// ajax sắp xếp sản phẩm trang chủ
+Route::get('/sapxep', [TrangChuController::class, 'sapxep'])->name('sapxep');
+
+
+// autocomplete tìm kiếm
+Route::post('/autocomplete', [TrangChuController::class, 'autocomplete'])->name('autocomplete');
+
+// thêm đơn hàng + chi tiết đơn hàng bằng giỏ hàng
+Route::post('/thanhtoan', [TrangChuController::class, 'ThanhToan'])->name('ThanhToan');
+
+// Login Facebook
+Route::get('/facebook', [SocialController::class, 'facebookRedirect']);
+Route::get('/facebook/callback', [SocialController::class, 'loginWithFacebook']);
+
+// Login Google
+Route::get('/google', [SocialController::class, 'googleRedirect']);
+Route::get('/google/callback', [SocialController::class, 'loginWithGoogle']);
+
+
+// View sản phẩm hết hàng
+Route::get('/hethang', [DashboardController::class, 'sanphamHethang'])->name('hethang');
+
+// ajax Lọc theo ngày -> thống kê
+Route::post('/loctheongay', [DashboardController::class, 'locTheoNgay'])->name('loc.ngay');
+Route::post('/locselect', [DashboardController::class, 'locSelect'])->name('loc.select');
+
+// upload ảnh trong CKEditor
+Route::post('ckeditor/upload', [DashboardController::class, 'upload_ckeditor'])->name('ckeditor-upload');
+Route::get('ckeditor/browser', [DashboardController::class, 'browser_ckeditor'])->name('ckeditor-browser');
 
 
 
@@ -93,7 +113,7 @@ Route::group([
     'prefix' => 'quanli',
     'middleware' => ['auth', 'check.user'],
 ], function () {
-    Route::get('/', [SanphamController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/sendcart/{iddonhang}', [MailController::class, 'sendMail'])->name('send.Mail');
 
@@ -170,22 +190,59 @@ Route::group([
         Route::delete('/giamgia/{idgiamgia}', [GiamgiaController::class, 'destroy'])->name('giamgia.destroy');
     });
 
+
+    // màu sắc sản phẩm
+    Route::group([
+        'prefix' => 'mausac',
+        'as' => 'mausac.',
+    ], function () {
+        Route::get('/', [MausacController::class, 'index'])->name('index');
+
+        Route::get('/create/{sanpham}', [MausacController::class, 'create'])->name('create');
+
+        Route::post('/', [MausacController::class, 'store'])->name('store');
+
+        Route::get('/{mausac}/edit', [MausacController::class, 'edit'])->name('edit');
+
+        Route::put('/{mausac}', [MausacController::class, 'update'])->name('update');
+
+        Route::delete('/{mausac}', [MausacController::class, 'destroy'])->name('destroy');
+    });
+
+    // size và tổng số lượng sản phẩm
+    Route::group([
+        'prefix' => 'sizetongsoluong',
+        'as' => 'size_tongsoluong.',
+    ], function () {
+        Route::get('/', [SizeTongsoluongController::class, 'index'])->name('index');
+
+        Route::get('/create/{mausac}', [SizeTongsoluongController::class, 'create'])->name('create');
+
+        Route::post('/', [SizeTongsoluongController::class, 'store'])->name('store');
+
+        Route::get('/{size_tongsoluong}/edit', [SizeTongsoluongController::class, 'edit'])->name('edit');
+
+        Route::put('/{size_tongsoluong}', [SizeTongsoluongController::class, 'update'])->name('update');
+
+        Route::delete('/{size_tongsoluong}', [SizeTongsoluongController::class, 'destroy'])->name('destroy');
+    });
+
     // đơn hàng
     Route::group([
         'prefix' => 'donhang',
         'as' => 'donhang.',
     ], function () {
-        Route::get('/', [DonhangController::class, 'index'])->name('index');
-
-        Route::get('/{donhang}', [DonhangController::class, 'show'])->name('show');
+        Route::get('', [DonhangController::class, 'index'])->name('index');
 
         Route::get('/create', [DonhangController::class, 'create'])->name('create');
 
-        Route::post('', [DonhangController::class, 'store'])->name('store');
+        Route::post('/', [DonhangController::class, 'store'])->name('store');
 
         Route::get('/{donhang}/edit', [DonhangController::class, 'edit'])->name('edit');
 
         Route::put('/{donhang}', [DonhangController::class, 'update'])->name('update');
+
+        Route::get('/{donhang}', [DonhangController::class, 'show'])->name('show');
 
         Route::delete('/{donhang}', [DonhangController::class, 'destroy'])->name('destroy');
     });
@@ -200,7 +257,7 @@ Route::group([
 
         Route::get('/create', [ChitietdonhangController::class, 'create'])->name('create');
 
-        Route::post('', [ChitietdonhangController::class, 'store'])->name('store');
+        Route::post('/', [ChitietdonhangController::class, 'store'])->name('store');
 
         Route::get('/{chitietdonhang}/edit', [ChitietdonhangController::class, 'edit'])->name('edit');
 
@@ -222,7 +279,7 @@ Route::group([
 
         Route::post('/', [NguoidungController::class, 'store'])->name('store');
 
-        Route::get('/{nguoidung}/edit', [NguoidungController::class, 'edit']);
+        Route::get('/{nguoidung}/edit', [NguoidungController::class, 'edit'])->name('edit');
 
         Route::put('/{nguoidung}', [NguoidungController::class, 'update'])->name('update');
 
@@ -243,5 +300,25 @@ Route::group([
         'as' => 'export.',
     ], function () {
         Route::get('/sanpham', [ExportExcelController::class, 'xuatsanpham'])->name('sanpham.xuat');
+    });
+
+    // Route trả lời đánh giá
+    Route::group([
+        'prefix' => 'traloi',
+        'as' => 'traloi.',
+    ], function () {
+        Route::get('/', [TraloiDanhgiaController::class, 'index'])->name('index');
+
+        Route::get('/create/{id_danhgia}', [TraloiDanhgiaController::class, 'create'])->name('create');
+
+        Route::post('/', [TraloiDanhgiaController::class, 'store'])->name('store');
+
+        Route::get('/{danhgia}/show', [TraloiDanhgiaController::class, 'show'])->name('show');
+
+        Route::get('/{traloi_danhgia}/edit', [TraloiDanhgiaController::class, 'edit'])->name('edit');
+
+        Route::put('/{traloi_danhgia}', [TraloiDanhgiaController::class, 'update'])->name('update');
+
+        Route::delete('/{traloi_danhgia}', [TraloiDanhgiaController::class, 'destroy'])->name('destroy');
     });
 });

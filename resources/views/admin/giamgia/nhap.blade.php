@@ -39,25 +39,18 @@
 
                 </div>
 
-                <div class="input-group-prepend row">
-                    <span class="input-group-text">Chọn sản phẩm giảm giá</span>
-                    <div class="form-check col-sm-9" id='defaultCheck'>
-                        <select class="form-control" name='id_sanpham'>
-
-                            @foreach ($sanphams as $sanpham)
-                                <option value="{{$sanpham->id }}">
-                                    --- Tên sản phẩm : {{ $sanpham->ten }}
-                                    --- Giá : {{ number_format($sanpham->gia) }} đ
-                                    --- Sale : {{ $sanpham->sale }} %
-                                    --- Giá sale : {{ number_format(($sanpham->gia * (100 - $sanpham->sale)) / 100) }} đ
-                                </option>
-                            @endforeach
-
-                        </select>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Sản phẩm giảm giá</span>
+                    <div class="form-check" id='defaultCheck'>
+                        <h5>Tên sản phẩm : {{ $sanpham->ten }} --- Giá : {{ number_format($sanpham->gia) }} vnđ --- Sale
+                            :
+                            {{ $sanpham->sale }}%
+                        </h5>
+                        <input type="hidden" name="id_sanpham" value="{{ $sanpham->id }}">
                     </div>
                 </div>
-                <a href="{{ route('sanpham.giamgia.index') }}" class="btn btn-primary">Về lại danh sách </a>
-                <input type="submit" class="btn btn-success ml-2" value="Thêm giảm giá">
+                <a href="{{ route('sanpham.giamgia.index') }}" class="btn btn-primary mt-3">Về lại danh sách </a>
+                <input type="submit" class="btn btn-success mt-3" value="Thêm giảm giá">
 
             </form>
         </div>

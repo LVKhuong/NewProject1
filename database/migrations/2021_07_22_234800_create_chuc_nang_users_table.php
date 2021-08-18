@@ -16,7 +16,7 @@ class CreateChucNangUsersTable extends Migration
         Schema::create('chuc_nang_users', function (Blueprint $table) {
             $table->id();
             $table->string('tenroute');
-            $table->string('tenemail');
+            $table->string('id_user');
             $table->timestamps();
         });
     }

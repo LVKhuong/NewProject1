@@ -18,10 +18,7 @@ class role extends Model
     ];
 
     public function users(){
-        return $this->belongsToMany(User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
-    public function menu(){
-        return $this->hasOne(quanlimenu::class, 'id_role', 'role');
-    }
 }

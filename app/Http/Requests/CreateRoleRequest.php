@@ -25,6 +25,8 @@ class CreateRoleRequest extends FormRequest
     {
         return [
             'user' => 'required|unique:roles,id_user',
+            'role' => 'required',
+            'ten_route' => 'required',
         ];
     }
 
@@ -33,6 +35,8 @@ class CreateRoleRequest extends FormRequest
         return [
             'user.required' => 'Bạn chưa chọn người dùng',
             'user.unique' => 'Người dùng đã được tạo rồi ! Vui lòng vào sửa !',
+            'role.required' => 'Bạn chưa chọn quyền người dùng',
+            'ten_route.required' => 'Bạn chưa thêm chức năng cho người dùng',
         ];
     }
 }

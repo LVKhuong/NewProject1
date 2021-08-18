@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'facebook_id',
+        'google_id',
     ];
 
     /**
@@ -44,11 +46,13 @@ class User extends Authenticatable
     ];
 
     public function chucnang(){
-        return $this->hasMany(ChucNangUser::class, 'tenemail', 'email');
+        return $this->hasMany(ChucNangUser::class, 'id_user', 'id');
     }
     
+    
     public function checkauth($tenRoute){
-        $chucnang = ChucNangUser::where('tenemail',$this->email)->where('tenroute',$tenRoute)->get();
+
+        $chucnang = ChucNangUser::where('id_user',$this->id)->where('tenroute',$tenRoute)->get();
         
         if(count($chucnang) > 0){
             return true;
@@ -61,16 +65,17 @@ class User extends Authenticatable
         return $this->morphOne(FileImage::class, 'imageable', 'imageable_type', 'imageable_id');
     }
 
-    public function binhluans(){
-        return $this->hasMany(binhluan::class, 'id_user', 'id');
-    }
-
-    public function tralois(){
-        return $this->hasMany(traloi::class, 'id_user', 'id');
-    }
-
     public function role(){
         return $this->hasOne(role::class, 'id_user', 'id');
     }
+
+    public function danhgias(){
+        return $this->hasMany(danhgia::class, 'id_user', 'id');
+    }
+
+    public function tralois(){
+        return $this->hasMany(traloi_danhgia::class, 'id_user', 'id');
+    }
+
 
 }

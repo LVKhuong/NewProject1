@@ -15,7 +15,7 @@ class CreateFileImagesTable extends Migration
   {
     Schema::create('file_images', function (Blueprint $table) {
       $table->id();
-      $table->string('ten_file');
+      $table->string('ten_file')->nullable();
       $table->string('duongdan')->nullable();
       $table->integer('imageable_id')->unsigned();
       $table->string('imageable_type');

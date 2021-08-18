@@ -2,7 +2,7 @@
     <h2>Danh mục</h2>
     <div class="panel-group category-products" id="accordian">
         <!--category-productsr-->
-        @foreach ($ChungLoais as $ChungLoai)
+        @foreach ($data_chungloai as $ChungLoai)
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title"><a href="{{ route('trangchu', ['chungloai' => $ChungLoai->id]) }}"><span
@@ -19,7 +19,7 @@
         <h2>Thương hiệu</h2>
         <div class="brands-name">
             <ul class="nav nav-pills nav-stacked">
-                @foreach ($ThuongHieus as $ThuongHieu)
+                @foreach ($data_thuonghieu as $ThuongHieu)
                     <li><a href="{{ route('trangchu', ['thuonghieu' => $ThuongHieu->id]) }}">
                             <span class="pull-right">
                                 ({{ count($SanPhams[$ThuongHieu->id]) }})
@@ -45,25 +45,21 @@
     <div class="brands_products">
         <div class="row">
             <h2>Sắp xếp theo</h2>
-            <form action="{{ route('trangchu') }}" method="get">
-                <div class="col-sm-8">
-                    <select class="form-control" name="SapXep">
+                <div class="col-sm-12">
+                    <select class="form-control" name="SapXep" id="SapXep">
                         <option>Mời bạn chọn</option>
-                        <option value="desc">Giá dần</option>
+                        <option value="desc">Giá giảm dần</option>
                         <option value="asc">Giá tăng dần</option>
                         <option value="new">Sản phẩm New</option>
                         <option value="hot">Sản phẩm Hot</option>
                     </select>
-                </div>
-                <div class="col-sm-4">
-                    <input type="submit" value="Sắp xếp" style="background: #FE980F;" class="btn btn-default">
                 </div>
             </form>
         </div>
 
         <div class="brands-name row" style="padding-top: 50px;">
             <h2>Khuyến mãi</h2>
-            @foreach ($dataSanPhamAll->where('sale', '>', 0)->take(6) as $sanpham)
+            @foreach ($data_sanpham->where('sale', '>', 0)->take(10) as $sanpham)
                 <ul class="nav nav-pills nav-stacked">
                     <li style="text-align: right">
                         <div class="col-sm-5">
@@ -72,16 +68,17 @@
                                     src="{{ $sanpham->images->first()->duongdan }}" alt=""></a>
                         </div>
                         <div class="col-sm-7">
-                            <a href="{{ route('sanphamshow', $sanpham->id) }}"><b>
+                            <a href="{{ route('sanphamshow', $sanpham->id) }}">
+                                <b>
                                     <h6 style="color: #171717">{{ $sanpham->ten }}</h6>
-                                </b></a>
+                                </b>
+                            </a>
                             <h6 style="color: red">SALE : {{ $sanpham->sale }} %</h6>
                             <del>
                                 <h6>Gốc: {{ number_format($sanpham->gia) }} đồng</h6>
                             </del>
                             <b>
-                                <h6>Giá: {{ number_format(($sanpham->gia * (100 - $sanpham->sale)) / 100) }} đồng
-                                </h6>
+                                <h6>Giá: {{ number_format(($sanpham->gia * (100 - $sanpham->sale)) / 100) }} đồng</h6>
                             </b>
                         </div>
                     </li>

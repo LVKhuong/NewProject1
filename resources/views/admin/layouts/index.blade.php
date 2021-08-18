@@ -9,6 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <base href="{{ asset('') }}">
+    {{-- _token  ajax --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Thêm thư viện mirror chart js --}}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 
     <title>SB Admin 2 - Dashboard</title>
     <!-- Custom fonts for this template-->
@@ -21,6 +26,8 @@
     <!-- Custom styles for this template-->
     <link href="admin/css/sb-admin-2.min.css" rel="stylesheet">
 
+    {{-- date picker --}}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -202,8 +209,8 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @auth
                                     @if (isset(Auth::user()->image->duongdan))
-                                        <img src="{{ Auth::user()->image->duongdan }}" alt=""
-                                            style="width: 50px; height:50px">
+                                        <img class="img-profile rounded-circle" src="{{ Auth::user()->image->duongdan }}"
+                                            alt="" style="width: 50px; height:50px">
                                     @endif
                                     <span
                                         class="mr-2 d-none d-lg-inline text-gray-600 small"><strong>{{ Auth::user()->name }}</strong></span>
@@ -312,9 +319,27 @@
             <script src="admin/js/demo/chart-area-demo.js"></script>
             <script src="admin/js/demo/chart-pie-demo.js"></script>
 
-            {{-- Editor text Tinymce --}}
-            <script src="https://cdn.tiny.cloud/1/wk1289vkbae8nmoom3aqahj39gn162rl4bt4l46gknqcs2kz/tinymce/5/tinymce.min.js"
-                        referrerpolicy="origin"></script>
+            {{-- // datepicker --}}
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+            {{-- Editor text CKEditor --}}
+            <script src="admin/ckeditor/ckeditor.js"></script>
+
+            {{-- Thêm thư viện mirror chart js --}}
+            <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+            
+            {{-- _token ajax --}}
+            <script>
+                $(function() {
+                    //set token ajax
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                });
+            </script>
 
             @yield('script')
 

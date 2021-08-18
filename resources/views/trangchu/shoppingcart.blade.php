@@ -25,9 +25,9 @@
                         @if (isset($carts))
                             @foreach ($carts as $cart)
                                 <tr>
-                                    <td class="cart_product">
-                                        @foreach ($dataSanPham->find($cart['id_sanpham'])->images as $image)
-                                            <a href=""><img style="width: 20%" src="{{ $image->duongdan }}"
+                                    <td>
+                                        @foreach ($dataAllSanpham->find($cart['id_sanpham'])->images as $image)
+                                            <a href=""><img style="width: 100px" src="{{ $image->duongdan }}"
                                                     alt="null"></a>
                                         @break
                             @endforeach
@@ -40,11 +40,35 @@
 
                             <td class="cart_price">
                                 @if ($cart['sale'] > 0)
-                                    <p>{{ number_format($cart['gia'] - ($cart['gia'] * $cart['sale']) / 100) }}</p>
-                                    <p><del>{{ number_format($cart['gia']) }}</del></p>
+                                    <p>{{ $cart['gia'] - ($cart['gia'] * $cart['sale']) / 100 }} đ</p>
+                                    <p><del>{{ $cart['gia'] }} $</del></p>
                                 @else
-                                    <p>{{ number_format($cart['gia']) }} đ</p>
+                                    <p>{{ $cart['gia'] }} $</p>
                                 @endif
+
+                                <div class="form-check form-check-inline">
+                                    <b>Mùa sắc : </b>
+                                    <label class="form-check-label" for="inlineRadio">
+                                        <img src="{{ $mausacs[$cart['id_sanpham']]->image->duongdan ?? '' }}" alt=""
+                                            style="width: 20px; height:20px;">
+                                        {{ $mausacs[$cart['id_sanpham']]->ten ?? '' }}
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <b>Size : </b>
+                                    <label class="form-check-label" for="inlineRadio">
+                                        {{ $sizes[$cart['id_sanpham']]->size ?? '' }}
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <b>Số lượng còn : </b>
+                                    <label class="form-check-label" for="inlineRadio    ">
+                                        {{ $sizes[$cart['id_sanpham']]->tongsoluong ?? '' }}
+                                    </label>
+                                </div>
+
                             </td>
                             <td class="cart_quantity">
                                 <div class="cart_quantity_button">
@@ -57,9 +81,9 @@
                             <td class="cart_total">
                                 <p class="cart_total_price">
                                     <span id="thanhTien{{ $cart['id_sanpham'] }}">
-                                        {{ number_format(($cart['gia'] - ($cart['gia'] * $cart['sale']) / 100) * $cart['soluong']) }}
+                                        {{ $cart['gia_sale'] * $cart['soluong'] }}
                                     </span>
-                                    đ
+                                    $
                                 </p>
                             </td>
                             <td class="cart_delete">
@@ -104,15 +128,14 @@
 
                                         <input type="hidden" id="payGia{{ $cart['id_sanpham'] }}"
                                             name="gia{{ $cart['id_sanpham'] }}" value="
-                                                                                @if ($cart['sale']>
-                                        0) {{ $cart['gia'] - ($cart['gia'] * $cart['sale']) / 100 }}
+                                                                    @if ($cart['sale']> 0) {{ $cart['gia'] - ($cart['gia'] * $cart['sale']) / 100 }}
                                     @else
                                         {{ $cart['gia'] }} @endif
                                         ">
 
-                                        <input type="hidden" id="payThanhTien{{ $cart['id_sanpham'] }}"
+                                        <input type="text" id="payThanhTien{{ $cart['id_sanpham'] }}"
                                             name="thanhtien{{ $cart['id_sanpham'] }}"
-                                            value="{{ ($cart['gia'] - ($cart['gia'] * $cart['sale']) / 100) * $cart['soluong'] }}">
+                                            value="{{ $cart['gia_sale'] * $cart['soluong']}}">
                                     @endforeach
 
                                     <input type="hidden" name="trangThai" value="Đã đặt">
@@ -130,7 +153,7 @@
                 <div class="col-sm-6">
                     <div class="total_area">
                         <ul>
-                            <li>Tổng tiền : <span id="tongTien">{{ number_format($tongTien) }} đ</span></li>
+                            <li>Tổng tiền : <span id="tongTien">{{ $tongTien }} đ</span></li>
                             <li>Phí Ship : <span>Free</span></li>
                         </ul>
                         {{-- <a class="btn btn-default update" href="">Update</a>

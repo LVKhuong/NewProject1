@@ -18,7 +18,8 @@
                             @if (Route::has('login'))
                                 @auth
                                     @if (isset(Auth::user()->image->duongdan))
-                                        <img src="{{ Auth::user()->image->duongdan ?? '' }}"
+                                        <img class="img-profile rounded-circle"
+                                            src="{{ Auth::user()->image->duongdan ?? '' }}"
                                             style="width: 30px; height:30px;" alt="Chưa có ảnh">
                                     @endif
 
@@ -29,6 +30,7 @@
                                     @if (Route::has('register'))
                                         <li><a href="{{ route('register') }}">Register</a></li>
                                     @endif
+
                                 @endauth
                             @endif
                         </ul>
@@ -94,7 +96,7 @@
         <!--header-bottom-->
         <div class="container">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-6">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
                             data-target=".navbar-collapse">
@@ -109,7 +111,7 @@
                             <li><a href="{{ route('trangchu') }}" class="active">Trang chủ</a></li>
                             <li class="dropdown"><a href="#">Danh mục<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    @foreach ($ChungLoais as $chungloai)
+                                    @foreach ($data_chungloai as $chungloai)
                                         <li><a
                                                 href="{{ route('trangchu', ['chungloai' => $chungloai->id]) }}">{{ $chungloai->ten }}</a>
                                         </li>
@@ -118,7 +120,7 @@
                             </li>
                             <li class="dropdown"><a href="#">Thương hiệu<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    @foreach ($ThuongHieus as $thuonghieu)
+                                    @foreach ($data_thuonghieu as $thuonghieu)
                                         <li><a
                                                 href="{{ route('trangchu', ['thuonghieu' => $thuonghieu->id]) }}">{{ $thuonghieu->ten }}</a>
                                         </li>
@@ -131,12 +133,20 @@
                     </div>
 
                 </div>
-                <div class="col-sm-3 ">
-                    <form action="{{ route('trangchu') }}" method="get">
-                        <input type="text" placeholder="Tìm kiếm sản phẩm, thương hiệu" name="TimKiem" />
+                <form action="{{ route('trangchu') }}" method="get" autocomplete="off">
+                    <div class="col-sm-5 ">
+                        <input type="text" style="width: 100%;" placeholder="Tìm kiếm sản phẩm, thương hiệu"
+                            name="TimKiem" id="key" />
+                        <div id="search_ajax">
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1">
                         <input type="submit" class="btn" value="Tìm kiếm" style="background: #FE980F;">
-                    </form>
-                </div>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>

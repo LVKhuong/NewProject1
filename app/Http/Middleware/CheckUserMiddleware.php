@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\ChucNangUser;
 use App\Models\User;
 use Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class CheckUserMiddleware
 {

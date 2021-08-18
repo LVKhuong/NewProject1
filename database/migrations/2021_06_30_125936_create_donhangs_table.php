@@ -20,6 +20,8 @@ class CreateDonhangsTable extends Migration
             $table->date('ngaymua');
             $table->integer('tongtien');
             $table->string('trangthai');
+            $table->text('diachi');
+            $table->integer('sodienthoai');
             $table->timestamps();
         });
     }

@@ -165,7 +165,13 @@ return [
         /*
          * Package Service Providers...
          */
+
+         //excel
         Maatwebsite\Excel\ExcelServiceProvider::class,        
+
+        // facebook
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -174,7 +180,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        
     ],
 
     /*
@@ -227,7 +233,14 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //excel
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        //facebook
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+
+        
     ],
 
 ];
